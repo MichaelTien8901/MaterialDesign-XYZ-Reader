@@ -8,7 +8,9 @@
     android:layout_marginBottom="4dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?selectableItemBackground">
+    android:foreground="?selectableItemBackground"
+    android:elevation="@dimen/card_elevation"
+    >
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -45,9 +47,10 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingBottom="4dp"
-            android:textColor="@color/ltgray"
+            android:textColor="@color/text_reverse"
             android:ellipsize="end"
-            android:maxLines="3" />
+            android:maxLines="3"
+            android:fontFamily="RobotoMedium" />
 
         <TextView
             android:id="@+id/article_subtitle"
@@ -59,7 +62,8 @@
             android:textColor="@color/ltgray"
             android:maxLines="1"
             android:singleLine="true"
-            android:ellipsize="end" />
+            android:ellipsize="end"
+            android:fontFamily="RobotoLight" />
         </LinearLayout>
     </FrameLayout>
 
