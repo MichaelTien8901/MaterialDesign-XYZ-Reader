@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui;
 
+import android.app.ActivityOptions;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -149,8 +151,15 @@ public class ArticleListActivity extends AppCompatActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(ArticleListActivity.this
+                                //                            , vh.thumbnailView, getString(R.string.transition_name)
+                        ).toBundle();
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))), bundle);
+                    } else {
+                        startActivity(new Intent(Intent.ACTION_VIEW,ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
+                    }
                 }
             });
             return vh;
@@ -167,10 +176,18 @@ public class ArticleListActivity extends AppCompatActivity implements
                             DateUtils.FORMAT_ABBREV_ALL).toString()
                             + " by "
                             + mCursor.getString(ArticleLoader.Query.AUTHOR));
+
+//            String image_url = mCursor.getString(ArticleLoader.Query.THUMB_URL);
+//            Picasso.with(ArticleListActivity.this)
+//                    .load(image_url)
+////                    .placeholder(R.drawable.empty_detail)
+//                    .into(holder.thumbnailView);
 //            holder.thumbnailView.setImageUrl(
 //                    mCursor.getString(ArticleLoader.Query.THUMB_URL),
 //                    ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
 //            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+
+            final float aspect_ratio = mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO);
 
             ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader().
                 get(mCursor.getString(ArticleLoader.Query.THUMB_URL), new ImageLoader.ImageListener() {
@@ -181,6 +198,7 @@ public class ArticleListActivity extends AppCompatActivity implements
 //                            Palette p = Palette.from(bitmap).generate();
 //                            int MutedColor = p.getMutedColor(0xFF333333);
                             holder.thumbnailView.setImageBitmap(bitmap);
+                            holder.thumbnailView.setAspectRatio(aspect_ratio);
 //                            holder.title_container.setBackgroundColor(MutedColor);
                         }
                     }
