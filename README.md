@@ -15,6 +15,7 @@ XYZ reader is a mock RSS feed reader about all things bacon.
 ## Libraries
 
 * [OkHTTP](http://square.github.io/okhttp/), HTTP client library for Android
+* [Volley](https://android.googlesource.com/platform/frameworks/volley), HTTP library and image tools for Android
 
 ## How To Install
 
